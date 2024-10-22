@@ -26,5 +26,5 @@ html {
 }
 
 a:hover {
-  color: #222831;
+  color: #222831 !important;
 }
