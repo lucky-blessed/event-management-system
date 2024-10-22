@@ -24,3 +24,7 @@ html {
 .ant-form-item-label {
   padding: 5px !important;
 }
+
+a:hover {
+  color: #222831;
+}
