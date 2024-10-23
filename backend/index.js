@@ -6,6 +6,7 @@ require('dotenv').config();
 
 connectMongoDB();
 
+app.use(expree.json());
 app.use("/api/users", require("./routes/users-route"))
 
 const port = process.env.port || 5000;
