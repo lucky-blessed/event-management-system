@@ -1,11 +1,23 @@
 import WelcomeContent from "../common/welcome-content";
-import { Button, Form, Input } from 'antd';
-import { Link} from "react-router-dom";
+import { Button, Form, Input, message } from 'antd';
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../../../api-services/users-service";
+import { useState } from "react";
 
 function RegisterPage() {
-
-    const onFinish = (values: never) => {
-        console.log("Recieve value:", values);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const onFinish = async (values: never) => {
+        try {
+            setLoading(true);
+            const response = await registerUser(values);
+            message.success(response.message);
+            navigate("/login");
+        } catch (error: any) {
+            message.error(error.response?.data.message || error.message);
+        } finally {
+            setLoading(false);
+        }
     };
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -33,7 +45,8 @@ function RegisterPage() {
                     <Button
                         type="primary"
                         htmlType="submit"
-                        block>
+                        block
+                        loading={loading}>
                         Register
                     </Button>
 
