@@ -8,7 +8,7 @@ const { error } = require('console');
 // User registration
 router.post("/register", async (req, res) => {
     try {
-        const userExists = await userSchema.findOne({ email: req.body.email });
+        const userExists = await User.findOne({ email: req.body.email });
         if (userExists) {
             return res.status(400).json({ message: "User already exist" });
         }
@@ -30,7 +30,7 @@ router.post("/login", async (req, res) => {
     try {
 
         // Check if user exist
-        const user = await user.findOne({ email: req.body.email });
+        const user = await User.findOne({ email: req.body.email });
         if (!user) {
             return res.status(400).json({ message: "User not found." });
         }
@@ -42,7 +42,7 @@ router.post("/login", async (req, res) => {
         }
 
         // Create and sign in token
-        const token = jwt.sign({ _id: user - _id }, process.env.JWT_SECRET_KEY);
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY);
         return res.status(200).json({ token, message: "Login successful." });
 
     } catch (error) {
