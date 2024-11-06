@@ -4,6 +4,7 @@ const User = require('../models/user-model');
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken");
 const { error } = require('console');
+const validateToken = require('../middlewares/validate-token');
 
 // User registration
 router.post("/register", async (req, res) => {
@@ -41,7 +42,7 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ message: "Invalid password." })
         }
 
-        // Create and sign in token
+        // Create and assign a token
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY);
         return res.status(200).json({ token, message: "Login successful." });
 
@@ -50,6 +51,15 @@ router.post("/login", async (req, res) => {
     }
 })
 
+// get current user
+router.get("/current-user", validateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select("-password");
+        return res.status(200).json({ data: user, message: "User fetched successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
 
 
 module.exports = router;
